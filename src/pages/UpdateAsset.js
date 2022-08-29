@@ -1,12 +1,13 @@
-import React, { useState } from 'react'
+import axios from 'axios'
+import React, { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import Footer from '../component/Footer'
 import Sidebar from '../component/Sidebar'
 import Topbar from '../component/Topbar'
-import { useAssetContext } from '../context/Asset'
 
-const AddAsset = () => {
-
-	const { addAssets } = useAssetContext();
+const UpdateAsset = () => {
+	const navigate = useNavigate()
+	const { uid } = useParams()
 
 	const initialState = {
 		carname: "",
@@ -24,8 +25,35 @@ const AddAsset = () => {
 		});
 	}
 
+	useEffect(() => {
+		if (uid) {
+			axios({
+				url: `http://localhost:8080/assets/${uid}`,
+				method: 'get'
+			})
+				.then((res) => {
+					setFormData(res.data);
+				})
+				.catch((err) => {
+					console.log(err);
+				})
+		}
+	}, [uid])
+
 	const submitForm = () => {
-		addAssets(formData)
+		if (uid) {
+			axios({
+				url: `http://localhost:8080/assets/${uid}`,
+				method: 'patch',
+				data: formData
+			})
+				.then((res) => {
+					navigate('/view-asset')
+				})
+				.catch((err) => {
+					console.log(err);
+				})
+		}
 	}
 
 	return (
@@ -35,14 +63,14 @@ const AddAsset = () => {
 			<div className='z-0 page-dimension'>
 				<div className='px-5 py-6 h-full w-full'>
 					<div>
-						<h1 className='uppercase font-bold text-2xl'>Add Asset</h1>
+						<h1 className='uppercase font-bold text-2xl'>Update Asset</h1>
 					</div>
 					<div className='flex justify-end my-3'>
 						<button className='duration-200 border rounded-md px-2 py-1 hover:text-white text-indigo-400 border-indigo-400 hover:border-transparent hover:bg-indigo-400 text-sm'>View Employee</button>
 					</div>
 					<div className='w-full mb-16'>
 						<div className='py-5 px-5 bg-white rounded-md shadow-md'>
-							<p className='mb-3 font-bold text-lg'>Add Asset</p>
+							<p className='mb-3 font-bold text-lg'>Update Asset</p>
 							<div className='grid grid-cols-2 gap-x-6 gap-y-3 text-sm mt-4'>
 								<div>
 									<label htmlFor="carname">Car Name: </label>
@@ -72,4 +100,4 @@ const AddAsset = () => {
 	)
 }
 
-export default AddAsset
+export default UpdateAsset

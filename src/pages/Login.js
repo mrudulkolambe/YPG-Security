@@ -1,9 +1,17 @@
 import React from 'react'
+import { useState } from 'react'
 import { BiUser } from 'react-icons/bi'
 import { MdSecurity } from 'react-icons/md'
+import { useAuthContext } from '../context/Auth'
 
 
 const Login = () => {
+	const [email, setEmail] = useState("")
+	const [password, setPassword] = useState("")
+	const { handleSignIn } = useAuthContext()
+	const handleUserSignin = () => {
+		handleSignIn(email, password)
+	}
 	return (
 		<>
 			<div className='h-screen w-screen flex bg-img'>
@@ -19,7 +27,7 @@ const Login = () => {
 							<div className='px-4'><BiUser className='text-2xl icon-color' /></div>
 							<div className='flex flex-col'>
 								<label htmlFor="username" className='text-xs text-gray-500'>Username</label>
-								<input type="text" id='username' placeholder='Enter Your Username' className='bg-transparent outline-none text-sm font-normal py-1' />
+								<input value={email} onChange={(e) => { setEmail(e.target.value) }} type="text" id='username' placeholder='Enter Your Username' className='bg-transparent outline-none text-sm font-normal py-1' />
 							</div>
 						</div>
 
@@ -27,11 +35,11 @@ const Login = () => {
 							<div className='px-4'><MdSecurity className='text-2xl icon-color' /></div>
 							<div className='flex flex-col'>
 								<label htmlFor="password" className='text-xs text-gray-500'>Password</label>
-								<input type="password" id='password' placeholder='Enter Your Password' className='bg-transparent outline-none text-sm font-normal py-1' />
+								<input value={password} onChange={(e) => { setPassword(e.target.value) }} type="password" id='password' placeholder='Enter Your Password' className='bg-transparent outline-none text-sm font-normal py-1' />
 							</div>
 						</div>
 
-						<button type='button' className='w-5/12 login-btn px-3 py-2 text-white rounded-lg mt-6'>Sign In</button>
+						<button onClick={handleUserSignin} type='button' className='w-5/12 login-btn px-3 py-2 text-white rounded-lg mt-6'>Sign In</button>
 						<div className='w-5/12 flex justify-between items-center'>
 							<p className='mt-6 text-gray-500'>Copyright © 2021 YPG Security</p>
 							<a href='mailto:info@connectiasolution.com' className='underline mt-6 text-gray-500'>Support</a>

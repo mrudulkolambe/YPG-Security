@@ -1,17 +1,31 @@
-import { createUserWithEmailAndPassword } from 'firebase/auth'
-import { doc, setDoc } from 'firebase/firestore'
-import React from 'react'
-import { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Footer from '../component/Footer'
 import Sidebar from '../component/Sidebar'
 import Topbar from '../component/Topbar'
-import { useAuthContext } from '../context/Auth'
-import { useEmployeeContext } from '../context/Employee'
-import { db, employeeAuth } from '../context/firebase_config'
+import { useParams } from 'react-router-dom'
+import axios from 'axios'
+import { useNavigate } from 'react-router-dom';
 
-const AddEmployee = () => {
-	const { addEmployee } = useEmployeeContext()
-	const { handleSignIn } = useAuthContext()
+const UpdateEmployee = () => {
+
+	const { uid } = useParams();
+
+	useEffect(() => {
+		if (uid) {
+			axios({
+				url: `http://localhost:8080/employee/${uid}`,
+				method: "get",
+			})
+				.then((res) => {
+					setFormData(res.data);
+				})
+				.catch((err) => {
+					console.log(err);
+				})
+		}
+	}, [uid])
+	const navigate = useNavigate();
+
 	const initialState = {
 		firstname: "",
 		lastname: "",
@@ -37,25 +51,18 @@ const AddEmployee = () => {
 	}
 
 	const submitForm = () => {
-		if (formData.confirmpassword === formData.password) {
-			createUserWithEmailAndPassword(employeeAuth, formData.email, formData.password)
-				.then( async (userCredential) => {
-					const user = userCredential.user;
-					await setDoc(doc(db, "users", user.uid), {
-						name: `${formData.firstname} ${formData.lastname}`,
-						email: formData.email,
-						role: "employee",
-						uid: user.uid
-					});
-					addEmployee(formData)
-					setFormData(initialState)
-				})
-				.catch((error) => {
-
-				});
-		} else {
-
-		}
+		axios({
+			url: `http://localhost:8080/employee/${uid}`,
+			method: 'patch',
+			data: formData
+		})
+			.then((res) => {
+				setFormData(res.data);
+				navigate('/view-employee');
+			})
+			.catch((err) => {
+				console.log(err.message);
+			})
 	}
 	return (
 		<>
@@ -64,14 +71,14 @@ const AddEmployee = () => {
 			<div className='z-0 page-dimension'>
 				<div className='px-5 py-6 h-full w-full'>
 					<div>
-						<h1 className='uppercase font-bold text-2xl'>Add Employees</h1>
+						<h1 className='uppercase font-bold text-2xl'>Update Employees</h1>
 					</div>
 					<div className='flex justify-end my-3'>
 						<button className='duration-200 border rounded-md px-2 py-1 hover:text-white text-indigo-400 border-indigo-400 hover:border-transparent hover:bg-indigo-400 text-sm'>View Employee</button>
 					</div>
 					<div className='w-full mb-16'>
 						<div className='py-5 px-5 bg-white rounded-md shadow-md'>
-							<p className='mb-3 font-bold text-lg'>Add Employee - General Info</p>
+							<p className='mb-3 font-bold text-lg'>Update Employee - General Info</p>
 							<div className='grid grid-cols-2 gap-x-6 gap-y-3 text-sm mt-4'>
 								<div>
 									<label htmlFor="firstname">First Name: </label>
@@ -89,14 +96,6 @@ const AddEmployee = () => {
 									<label htmlFor="username">Username: </label>
 									<input value={formData.username} onChange={handleFormData} type="text" className='rounded-md duration-200 focus:border-gray-500 mt-2 w-full py-2 px-4 border-2 outline-none' name="username" id="username" />
 									<p className='text-xs text-gray-500'>Allowed only letters, digits and @, +, -, _</p>
-								</div>
-								<div>
-									<label htmlFor="password">Password: </label>
-									<input value={formData.password} onChange={handleFormData} type="password" className='rounded-md duration-200 focus:border-gray-500 mt-2 w-full py-2 px-4 border-2 outline-none' name="password" id="password" />
-								</div>
-								<div>
-									<label htmlFor="confirmpassword">Confirm Password: </label>
-									<input value={formData.confirmpassword} onChange={handleFormData} type="password" className='rounded-md duration-200 focus:border-gray-500 mt-2 w-full py-2 px-4 border-2 outline-none' name="confirmpassword" id="confirmpassword" />
 								</div>
 							</div>
 						</div>
@@ -138,4 +137,4 @@ const AddEmployee = () => {
 	)
 }
 
-export default AddEmployee
+export default UpdateEmployee

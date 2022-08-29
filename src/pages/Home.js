@@ -3,8 +3,10 @@ import Footer from '../component/Footer'
 import HomepageDataTop from '../component/HomepageDataTop'
 import Sidebar from '../component/Sidebar'
 import Topbar from '../component/Topbar'
+import { useEmployeeContext } from '../context/Employee'
 
 const Home = () => {
+	const { employees } = useEmployeeContext()
 	return (
 		<>
 			<Sidebar />
@@ -12,7 +14,7 @@ const Home = () => {
 			<div className='z-0 page-dimension'>
 				<div className='h-full w-full px-5 py-6'>
 					<div className='grid grid-cols-3 gap-3'>
-						<HomepageDataTop title={'Number Of Employee'} data={9} icon={'users'} />
+						<HomepageDataTop title={'Number Of Employee'} data={employees.length} icon={'users'} />
 						<HomepageDataTop title={'Total Alarm Response'} data={23} icon={'cars'} />
 						<HomepageDataTop title={'Number Of Assets'} data={7} icon={'assets'} />
 					</div>
