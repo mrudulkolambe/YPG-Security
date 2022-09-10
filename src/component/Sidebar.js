@@ -29,6 +29,7 @@ const Sidebar = () => {
 						<div className={hoverState === 'employee' ? 'h-auto duration-200 bg-white' : 'h-0 duration-200'}>
 							<Link to="/add-employee"><p className='hover:bg-gray-200 duration-200 flex items-center nav-height pl-10'>Add Employee</p></Link>
 							<Link to="/view-employee"><p className='hover:bg-gray-200 duration-200 flex items-center nav-height pl-10'>View Employee</p></Link>
+							<Link to="/employee-track"><p className='hover:bg-gray-200 duration-200 flex items-center nav-height pl-10'>Employee Track</p></Link>
 						</div>
 					</div>
 				</div>
@@ -61,16 +62,25 @@ const Sidebar = () => {
 					<div className='nav-height nav-width flex items-center justify-center'>
 						<RiContactsBookLine className={hoverState === 'logs' ? 'text-indigo-600 text-xl duration-200' : 'duration-200 text-xl text-gray-500'} />
 					</div>
-					<div className={hoverState === "logs" ? 'font-bold block ml-10 opacity-100 duration-200 text-indigo-600 w-52' : 'w-0 text-indigo-600 opacity-0 duration-200 text-clip overflow-hidden whitespace-nowrap'}>
-						Logs
+					<div className={hoverState === "logs" ? 'nav-height font-bold block opacity-100 duration-200 text-indigo-600 w-72' : 'w-0 text-indigo-600 opacity-0 duration-200 text-clip overflow-hidden whitespace-nowrap'}>
+						<p className='flex items-center border-b-2 nav-height w-full  pl-10'>Logs</p>
+						<div className={hoverState === "logs" ? 'h-auto duration-200 bg-white' : 'h-0 duration-200'}>
+							<Link to="/view-employee-attendance"><p className='hover:bg-gray-200 duration-200 flex items-center nav-height pl-10'>View Employee Log</p></Link>
+							<Link to="/view-job-assigned-logs"><p className='hover:bg-gray-200 duration-200 flex items-center nav-height pl-10'>Assigned Jobs Log</p></Link>
+							<Link to="/view-job-request-logs"><p className='hover:bg-gray-200 duration-200 flex items-center nav-height pl-10'>Job Request Log</p></Link>
+							<Link to="/view-acitivity-logs"><p className='hover:bg-gray-200 duration-200 flex items-center nav-height pl-10'>Activity Logs</p></Link>
+						</div>
 					</div>
 				</div>
 				<div onMouseOver={() => { handleHover('report') }} onMouseOut={() => { handleHover('') }} className={hoverState === 'report' ? 'cursor-pointer text-indigo-600 accent-color border-2 self-start flex duration-200 items-center border-l-0' : 'cursor-pointer items-center justify-center bg-white duration-200 border-b-2 border-t-2  border-transparent self-start flex  text-clip overflow-hidden whitespace-nowrap'}>
 					<div className='nav-height nav-width flex items-center justify-center'>
 						<RiFileChartLine className={hoverState === 'report' ? 'text-indigo-600 text-xl duration-200' : 'duration-200 text-xl text-gray-500'} />
 					</div>
-					<div className={hoverState === "report" ? 'font-bold block ml-10 opacity-100 duration-200 text-indigo-600 w-52' : 'w-0 text-indigo-600 opacity-0 duration-200 text-clip overflow-hidden whitespace-nowrap'}>
-						Report
+					<div className={hoverState === "report" ? 'nav-height font-bold block opacity-100 duration-200 text-indigo-600 w-52' : 'w-0 text-indigo-600 opacity-0 duration-200 text-clip overflow-hidden whitespace-nowrap'}>
+						<p className='flex items-center border-b-2 nav-height w-full  pl-10'>Report</p>
+						<div className={hoverState === "report" ? 'h-auto duration-200 bg-white' : 'h-0 duration-200'}>
+							<Link to="/employee-route"><p className='hover:bg-gray-200 duration-200 flex items-center nav-height pl-10'>Employee Route</p></Link>
+						</div>
 					</div>
 				</div>
 			</div>

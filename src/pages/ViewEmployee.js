@@ -45,7 +45,7 @@ const ViewEmployee = () => {
 							</tr>
 							{
 								employees && employees.map((employee, i) => {
-									return <EmployeeRow employee={employee} i={i} />
+									return <EmployeeRow key={employee._id} employees={employees} setEmployees={setEmployees} employee={employee} i={i} />
 								})
 							}
 						</table>

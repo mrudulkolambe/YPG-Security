@@ -3,10 +3,14 @@ import Footer from '../component/Footer'
 import HomepageDataTop from '../component/HomepageDataTop'
 import Sidebar from '../component/Sidebar'
 import Topbar from '../component/Topbar'
+import { useAlarmResponse } from '../context/AlarmResponse'
+import { useAssetContext } from '../context/Asset'
 import { useEmployeeContext } from '../context/Employee'
 
 const Home = () => {
 	const { employees } = useEmployeeContext()
+	const { assets } = useAssetContext()
+	const { alarmResponse } = useAlarmResponse()
 	return (
 		<>
 			<Sidebar />
@@ -15,8 +19,8 @@ const Home = () => {
 				<div className='h-full w-full px-5 py-6'>
 					<div className='grid grid-cols-3 gap-3'>
 						<HomepageDataTop title={'Number Of Employee'} data={employees.length} icon={'users'} />
-						<HomepageDataTop title={'Total Alarm Response'} data={23} icon={'cars'} />
-						<HomepageDataTop title={'Number Of Assets'} data={7} icon={'assets'} />
+						<HomepageDataTop title={'Total Alarm Response'} data={assets.length} icon={'cars'} />
+						<HomepageDataTop title={'Number Of Assets'} data={alarmResponse.length} icon={'assets'} />
 					</div>
 					<div className='grid grid-cols-2 gap-4 mt-4'>
 						<div className='w-full h-96 bg-white shadow-lg rounded-md'></div>

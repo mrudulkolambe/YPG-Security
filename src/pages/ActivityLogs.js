@@ -1,9 +1,24 @@
-import React from 'react'
+import axios from 'axios'
+import React, { useEffect, useState } from 'react'
 import Footer from '../component/Footer'
 import Sidebar from '../component/Sidebar'
 import Topbar from '../component/Topbar'
+import moment from 'moment'
 
 const ActivityLogs = () => {
+	const [data, setData] = useState([])
+	useEffect(() => {
+		axios({
+			url: 'http://localhost:8080/logs/',
+			method: 'get'
+		})
+			.then((res) => {
+				setData(res.data)
+			})
+			.catch((err) => {
+				console.log(err)
+			})
+	}, []);
 	return (
 		<>
 			<Sidebar />
@@ -25,12 +40,16 @@ const ActivityLogs = () => {
 								<th className='w-2/12 font-bold py-3 px-2 border-r'>Date Time</th>
 								<th className='w-2/12 font-bold py-3 px-2 border-r'>Status</th>
 							</tr>
-							<tr className='w-full text-left border'>
-								<td className='w-6/12 font-light py-3 px-2 border-r'>Mrudul Kolambe</td>
-								<td className='w-2/12 font-light py-3 px-2 border-r'>mrudulkolambe</td>
-								<td className='w-2/12 font-light py-3 px-2 border-r'>mrudulkolambe02@gmail.com</td>
-								<td className='w-2/12 font-light py-3 px-2 border-r'>7057094772</td>
-							</tr>
+							{
+								data && data.map((res) => {
+									return <tr key={res._id} className='w-full text-left border'>
+										<td className='w-6/12 font-semibold text-gray-800 py-3 px-2 border-r'>{res.logdescription}</td>
+										<td className='w-2/12 font-semibold text-gray-800 py-3 px-2 border-r'>{moment(res.timestamp).fromNow()}</td>
+										<td className='w-2/12 font-semibold text-gray-800 py-3 px-2 border-r'>{moment(res.timestamp).format('ddd DD-MMM-YYYY, hh:mm A')}</td>
+										<td className='w-2/12 font-semibold text-gray-800 py-3 px-2 border-r'>{"GOTO"}</td>
+									</tr>
+								})
+							}
 						</table>
 					</div>
 				</div>

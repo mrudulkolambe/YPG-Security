@@ -8,10 +8,14 @@ import Topbar from '../component/Topbar'
 import { useAuthContext } from '../context/Auth'
 import { useEmployeeContext } from '../context/Employee'
 import { db, employeeAuth } from '../context/firebase_config'
+import { useUtilsContext } from '../context/Utlis'
+import { v4 as uuidv4 } from 'uuid';
 
 const AddEmployee = () => {
 	const { addEmployee } = useEmployeeContext()
+	const [uploadLoading, setUploadLoading] = useState(false)
 	const { handleSignIn } = useAuthContext()
+	const { uploadMedia } = useUtilsContext()
 	const initialState = {
 		firstname: "",
 		lastname: "",
@@ -39,7 +43,7 @@ const AddEmployee = () => {
 	const submitForm = () => {
 		if (formData.confirmpassword === formData.password) {
 			createUserWithEmailAndPassword(employeeAuth, formData.email, formData.password)
-				.then( async (userCredential) => {
+				.then(async (userCredential) => {
 					const user = userCredential.user;
 					await setDoc(doc(db, "users", user.uid), {
 						name: `${formData.firstname} ${formData.lastname}`,
@@ -117,18 +121,18 @@ const AddEmployee = () => {
 								</div>
 								<div>
 									<label htmlFor="profileimage">Profile Picture: </label>
-									<input type="file" className='rounded-md duration-200 focus:border-gray-500 mt-2 w-full py-2 px-4 border-2 outline-none' name="profileimage" id="profileimage" />
+									<input onChange={(e) => { uploadMedia(e.target.files[0], `employee/${uuidv4()}`, formData, setFormData, setUploadLoading, 'profile_picture') }} type="file" className='rounded-md duration-200 focus:border-gray-500 mt-2 w-full py-2 px-4 border-2 outline-none' name="profileimage" id="profileimage" />
 								</div>
 								<div>
 									<label htmlFor="documentimage">Document Image: </label>
-									<input type="file" className='rounded-md duration-200 focus:border-gray-500 mt-2 w-full py-2 px-4 border-2 outline-none' name="documentimage" id="documentimage" />
+									<input onChange={(e) => { uploadMedia(e.target.files[0], `employee/${uuidv4()}`, formData, setFormData, setUploadLoading, 'document_image') }} type="file" className='rounded-md duration-200 focus:border-gray-500 mt-2 w-full py-2 px-4 border-2 outline-none' name="documentimage" id="documentimage" />
 								</div>
 							</div>
 							<div className='text-sm mt-3'>
 								<label htmlFor="address">Address: </label>
 								<textarea name="address" value={formData.address} onChange={handleFormData} id="address" className='h-32 resize-none rounded-md duration-200 focus:border-gray-500 mt-2 w-full py-2 px-4 border-2 outline-none'></textarea>
 							</div>
-							<button onClick={submitForm} className='mt-4 bg-indigo-500 px-4 py-1.5 rounded-md text-white hover:bg-indigo-600 duration-300'>Save Employee</button>
+							<button disabled={uploadLoading} onClick={submitForm} className='disabled:bg-indigo-300 mt-4 bg-indigo-500 px-4 py-1.5 rounded-md text-white hover:bg-indigo-600 duration-300'>Save Employee</button>
 						</div>
 					</div>
 				</div>

@@ -3,10 +3,14 @@ import Footer from '../component/Footer'
 import Sidebar from '../component/Sidebar'
 import Topbar from '../component/Topbar'
 import { useAssetContext } from '../context/Asset'
+import { useUtilsContext } from '../context/Utlis'
+import { v4 as uuidv4 } from 'uuid';
 
 const AddAsset = () => {
 
 	const { addAssets } = useAssetContext();
+	const { uploadMedia } = useUtilsContext()
+	const [uploadLoading, setUploadLoading] = useState(false)
 
 	const initialState = {
 		carname: "",
@@ -58,11 +62,11 @@ const AddAsset = () => {
 								</div>
 								<div>
 									<label htmlFor="carimage">Car Image: </label>
-									<input type="file" className='rounded-md duration-200 focus:border-gray-500 mt-2 w-full py-2 px-4 border-2 outline-none' name="carimage" id="carimage" />
+									<input onChange={(e) => { uploadMedia(e.target.files[0], `assets/${uuidv4()}`, formData, setFormData, setUploadLoading, 'asset') }} type="file" className='rounded-md duration-200 focus:border-gray-500 mt-2 w-full py-2 px-4 border-2 outline-none' name="carimage" id="carimage" />
 									<p className='text-xs text-gray-500'>{'Choose <2MB image size'}</p>
 								</div>
 							</div>
-							<button onClick={submitForm} className='mt-3 bg-indigo-500 px-4 py-1.5 rounded-md text-white hover:bg-indigo-600 duration-300'>Save Asset</button>
+							<button disabled={uploadLoading} onClick={submitForm} className='disabled:bg-indigo-300 mt-3 bg-indigo-500 px-4 py-1.5 rounded-md text-white hover:bg-indigo-600 duration-300'>Save Asset</button>
 						</div>
 					</div>
 				</div>
